@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
     if (argc < 2)
     {
-        std::cout << "Usage: ./HDRVisualizer <image_or_folder>\n";
+        std::cout << "Usage: ./bin/HDRVisualizer <image_or_folder>\n";
         return -1;
     }
 
@@ -45,10 +45,10 @@ int main(int argc, char** argv)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
-    // --- NUEVA LÓGICA DE IMÁGENES ---
-    cv::Mat base_img_raw;    // Imagen original HDR completa
-    cv::Mat base_img_ldr;    // Imagen completa ya con Tonemapping (8-bits)
-    cv::Mat current_img_ldr; // El recorte (zoom) de la imagen ya tonemapeada
+    // --- NEW LOGIC FOR IMAGES ---
+    cv::Mat base_img_raw;    //original hdr image
+    cv::Mat base_img_ldr;    // complete image with tonemapping (8-bits)
+    cv::Mat current_img_ldr; // current crop (zoom) of the image tonemaped
     GLuint texture = 0;
 
     ZoomState zoom_state;
@@ -58,21 +58,20 @@ int main(int argc, char** argv)
     float d_gamma = 1.0f, d_saturation = 1.0f, d_bias = 0.85f;
     float m_gamma = 1.0f, m_scale = 0.7f, m_saturation = 1.0f;
     
-    // Separamos las actualizaciones:
-    bool needs_tonemap = false; // Solo se activa si cambias parámetros HDR
-    bool needs_texture = false; // Se activa si haces zoom (más rápido)
-
+    // updates
+    bool needs_tonemap = false; // ONLY IS ACTIVATED IF YOU CHANGE HDR PARAMETERS
+    bool needs_texture = false; // IS ACTIVATED IF YOU DO A ZOOM (MORE FAST)
     auto doTonemap = [&]()
     {
         if (base_img_raw.empty()) return;
 
-        // 1. Aplicamos el tonemapping a la imagen COMPLETA
+        // 1. APPLY TONEMAPPING TO THE COMPLETE IMAGE
         base_img_ldr = applyTonemap(base_img_raw, mode,
                                    r_gamma, intensity, light_adapt, color_adapt,
                                    d_gamma, d_saturation, d_bias,
                                    m_gamma, m_scale, m_saturation);
         
-        // 2. Aplicamos el nivel de zoom actual sobre la imagen procesada
+        // 2. APPLY ZOOM LEVEL ON THE PROCESSED IMAGE
         current_img_ldr = base_img_ldr(zoom_state.current_roi).clone();
         needs_texture = true; 
     };
@@ -117,7 +116,7 @@ int main(int argc, char** argv)
         // ---------------- UI ----------------
         ImGui::Text("Tonemapping");
 
-        // Fíjate que los botones ahora activan 'needs_tonemap'
+        // NEEDS_TONEMAP NOW ACTIVATES 'needs_tonemap'
         if (ImGui::Button("Reinhard")) { mode = 1; needs_tonemap = true; } ImGui::SameLine();
         if (ImGui::Button("Drago")) { mode = 2; needs_tonemap = true; } ImGui::SameLine();
         if (ImGui::Button("Mantiuk")) { mode = 3; needs_tonemap = true; }
@@ -139,10 +138,10 @@ int main(int argc, char** argv)
             if (ImGui::SliderFloat("Saturation", &m_saturation, 0.0f, 2.0f)) needs_tonemap = true;
         }
 
-        // El Reset Zoom solo modifica el recorte, así que activa 'needs_texture'
+        // ZOOM BUTTON ONLY ACTIVATES 'needs_texture'
         DrawResetZoomButton(current_img_ldr, base_img_ldr, zoom_state, needs_texture);
 
-        // Procesar las actualizaciones en orden
+        // PROCESS UPDATES IN ORDER
         if (needs_tonemap)
         {
             doTonemap();
