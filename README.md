@@ -1,6 +1,6 @@
-# 🚀 HPVis (High-Polarized & HDR Visualizer)
+# 🚀 rev(Research Engine Visualizer)
 
-**HPVis** is an interactive High Dynamic Range (HDR) and Polarized image viewer developed in **C++**. It utilizes **OpenGL** for hardware-accelerated rendering, **OpenCV** for robust image processing, and features a modern, clean graphical interface built with **Dear ImGui**. 
+**rev** is an interactive High Dynamic Range (HDR) and Polarized image viewer developed in **C++**. It utilizes **OpenGL** for hardware-accelerated rendering, **OpenCV** for robust image processing, and features a modern, clean graphical interface built with **Dear ImGui**. 
 
 The engine natively decodes raw polarization data alongside standard HDR formats, providing an optimized multi-panel monolithic grid layout for advanced computer vision analysis.
 
@@ -86,8 +86,8 @@ Actually, the application is working in ubuntu 22.04 and macos m1. I'm not sure 
 ## To clone this project 
 
 ```bash
-git clone https://github.com/arielz001/HDRVisualizer.git
-cd HDRVisualizer
+git clone https://github.com/arielz001/rev.git
+cd rev
 git submodule update --init --recursive
 mkdir build
 cd build
@@ -99,17 +99,17 @@ make
 
 ## Related project
 
-HDRVisualizer is inspired by [vpv](https://github.com/kidanger/vpv), a popular Image viewer for Linux and MacOS.
+rev is inspired by [vpv](https://github.com/kidanger/vpv), a popular Image viewer for Linux and MacOS.
 
 
 ## To cite this software
 
 ```
-@misc{hdrvisualizer2026,
+@misc{rev2026,
   author       = {arielz001},
-  title        = {HDRVisualizer: Interactive HDR Image Viewer},
+  title        = {rev: Interactive HDR Image Viewer},
   year         = {2026},
   publisher    = {GitHub},
   journal      = {GitHub repository},
-  howpublished = {\url{[https://github.com/arielz001/HDRVisualizer](https://github.com/arielz001/HDRVisualizer)}}
+  howpublished = {\url{[https://github.com/arielz001/rev](https://github.com/arielz001/rev)}}
 }```
