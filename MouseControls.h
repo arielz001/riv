@@ -45,7 +45,8 @@ void HandleMousePanning(ZoomState& zoom_state,
                         bool& needs_update);
 
 
-void RenderPixelValuesOverlay(const ZoomState& zoom_state, 
-                              const ImVec2& img_screen_pos, 
-                              const ImVec2& size, 
-                              const cv::Mat& current_img_ldr);
+void RenderPixelValuesOverlay(const ZoomState& zoom_state,
+                            const ImVec2& img_screen_pos, 
+                            const ImVec2& size,
+                             const cv::Mat& current_img_ldr, 
+                             const ImVec2& normalized_cursor_pos);

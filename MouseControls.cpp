@@ -235,7 +235,7 @@ void HandleMousePanning(ZoomState& zoom_state, const ImVec2& size, cv::Mat& curr
 }
 
 // pixel values overlay
-void RenderPixelValuesOverlay(const ZoomState& zoom_state, const ImVec2& img_screen_pos, const ImVec2& size, const cv::Mat& current_img_ldr)
+void RenderPixelValuesOverlay(const ZoomState& zoom_state, const ImVec2& img_screen_pos, const ImVec2& size, const cv::Mat& current_img_ldr, const ImVec2& normalized_cursor_pos)
 {
     if (current_img_ldr.empty()) return;
 
@@ -247,10 +247,7 @@ void RenderPixelValuesOverlay(const ZoomState& zoom_state, const ImVec2& img_scr
 
     if (pixel_width_dst < 15.0f || pixel_height_dst < 15.0f) return;
 
-    // Use WindowDrawList to draw text cleanly inside the image window context
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    ImGuiIO& io = ImGui::GetIO();
-    ImVec2 mouse_pos = io.MousePos;
 
     float base_threshold = 42.0f; 
     float dynamic_font_scale = pixel_width_dst / base_threshold;
@@ -258,6 +255,14 @@ void RenderPixelValuesOverlay(const ZoomState& zoom_state, const ImVec2& img_scr
 
     ImGui::SetWindowFontScale(dynamic_font_scale);
     float scaled_font_height = ImGui::GetFontSize();
+
+    // CALCULAR EL PÍXEL EXACTO USANDO COORDENADAS SINCRONIZADAS
+    int hover_c = -1;
+    int hover_r = -1;
+    if (normalized_cursor_pos.x >= 0.0f && normalized_cursor_pos.y >= 0.0f) {
+        hover_c = static_cast<int>(normalized_cursor_pos.x * visible_cols);
+        hover_r = static_cast<int>(normalized_cursor_pos.y * visible_rows);
+    }
 
     for (int r = 0; r < visible_rows; ++r)
     {
@@ -268,11 +273,11 @@ void RenderPixelValuesOverlay(const ZoomState& zoom_state, const ImVec2& img_scr
             float x1 = x0 + pixel_width_dst;
             float y1 = y0 + pixel_height_dst;
 
-            bool is_hovered = (mouse_pos.x >= x0 && mouse_pos.x < x1 && mouse_pos.y >= y0 && mouse_pos.y < y1);
+            // LA MAGIA OCURRE AQUÍ: Comparamos el índice del píxel, no el ratón físico
+            bool is_hovered = (c == hover_c && r == hover_r);
 
             if (is_hovered)
             {
-                // Draw hovered highlight on Foreground so it doesn't get cut off or blend poorly
                 ImGui::GetForegroundDrawList()->AddRect(ImVec2(x0, y0), ImVec2(x1, y1), IM_COL32(0, 255, 0, 255), 0.0f, 0, 2.0f);
             }
             else
