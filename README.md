@@ -61,9 +61,14 @@ The viewer also supports 3D models visualization. The following formats are supp
 
 ---
 
-### Video playback
+### Events (.aedat4) playback
 
-The viewer also supports video playback.
+The viewer also supports events playback in a format compatible with [dv-processing](https://github.com/inivation/dv-processing). This include a slider to control the timestamp of the event stream.
+
+![demo](assets/events.gif)
+
+
+
 
 ## 🎮 Controls & Interface Guide
 
@@ -105,71 +110,129 @@ The application natively implements three of the most representative tone mappin
 
 ---
 
-## 🔧 Requirements & Installation
+# 🔧 Requirements & Installation
 
-### 1. System Dependencies
-The application is fully compatible and tested under **Ubuntu 22.04 LTS** and **macOS (M1/Silicon architecture)** natively. *(Windows compatibility is not officially tested)*.
+## Supported Platforms
 
-Ensure you have the C++ compilers and development packages for the required graphical libraries installed:
+**RIV** has been tested and works on:
 
+- Ubuntu 22.04 LTS
+- macOS (Apple Silicon / M1 / M2)
 
+⚠️ Windows support is currently **not officially tested**, so compatibility is not guaranteed.
+
+---
+
+# 1. Install Dependencies
+
+## Ubuntu 22.04
+
+Install the required development packages:
 
 ```bash
 sudo apt update
-sudo apt install build-essential cmake libopencv-dev libopenexr-dev libglfw3-dev libgl1-mesa-dev xorg-dev 
+
+sudo apt install \
+    build-essential \
+    cmake \
+    libopencv-dev \
+    libopenexr-dev \
+    libglfw3-dev \
+    libgl1-mesa-dev \
+    xorg-dev
 ```
 
+---
 
-In MacOS, you may need install the following dependencies:
+## macOS (Apple Silicon)
+
+Using Homebrew:
 
 ```bash
 brew install cmake opencv openexr glfw
 ```
 
-Actually, the application is working in ubuntu 22.04 and macos m1. I'm not sure if it works in windows.
+---
 
+# 2. Clone the Repository
 
-(Optional) For Event-Based Camera Support only in ubuntu system (.aedat4 files): 
-
-**UBUNTU SYSTEMS**
 ```bash
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo add-apt-repository ppa:inivation-ppa/inivation
-sudo apt update
-sudo apt install dv-processing
-sudo apt install libeigen3-dev -y
-```
-Then, you may need to install clang18
-```bash
-curl -fsSL https://hexmos.com/ipm-install | bash && 
-ipm i clang-18
-```
-and you should press enter, enter and enter again to accept the installation.
-
-
-
-## Build from source
-```bash
-
 git clone https://github.com/arielz001/riv.git
 cd riv
 git submodule update --init --recursive
+```
 
+---
+
+# 3. Build from Source
+
+Create the build directory:
+
+```bash
 mkdir build
 cd build
+```
 
-```
-### if you are using dv processing and clang 18
-```bash
-CC=clang-18 CXX=clang++-18 cmake ..
-make
-```
-### if you are not using dv processing
+## Standard Build
+
+If you **do not need event-camera support**:
+
 ```bash
 cmake ..
 make
 ```
-### Optional install (Linux)
+
+---
+
+# Optional: Event-Based Camera Support (.aedat4)
+
+This section is only required if you want to open **`.aedat4` files** from event-based cameras.
+
+Currently supported **only on Ubuntu**.
+
+---
+
+## Install dv-processing
+
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo add-apt-repository ppa:inivation-ppa/inivation
+
+sudo apt update
+
+sudo apt install dv-processing
+sudo apt install libeigen3-dev -y
+```
+
+---
+
+## Install clang-18
+
+Some versions of `dv-processing` may require **clang-18**.
+
+Install it with:
+
+```bash
+curl -fsSL https://hexmos.com/ipm-install | bash
+ipm i clang-18
+```
+
+During installation, press **Enter** to accept the default options.
+
+---
+
+## Build with dv-processing
+
+```bash
+CC=clang-18 CXX=clang++-18 cmake ..
+make
+```
+
+---
+
+# Optional Installation
+
+To install `riv` system-wide:
 
 ```bash
 sudo make install
@@ -177,6 +240,32 @@ sudo make install
 
 ---
 
+# Quick Start
+
+### Standard build
+
+```bash
+git clone https://github.com/arielz001/riv.git
+cd riv
+git submodule update --init --recursive
+
+mkdir build
+cd build
+
+cmake ..
+make
+```
+
+---
+
+### Build with `.aedat4` support
+
+After installing `dv-processing` and `clang-18`:
+
+```bash
+CC=clang-18 CXX=clang++-18 cmake ..
+make
+```
 ## Usage (if you installed with sudo make install, else use ./build/bin/riv)
 
 Run **riv** by passing an image file or a directory containing images:
