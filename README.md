@@ -57,10 +57,7 @@ The viewer also supports 3D models visualization. The following formats are supp
 * .ply
 * .pcd
 
-<p align="center">
-  <img src="assets/zebra.png" alt="3D model visualization" width="500"/>
-</p>
-
+![demo](./assets/3dviewer.gif)
 
 ---
 
