@@ -28,7 +28,7 @@ The engine natively decodes raw polarization data alongside standard HDR formats
 
 Raw polarization mosaics are automatically decoded into a synchronized 6-panel layout, displaying the four polarization angles together with **AoLP** and **DoLP** computed in real time for analysis.
 
-![demo](./assets/img_used.gif)
+![demo](assets/img_used.gif)
 
 ---
 ### HDR visualization with global tonemapping
@@ -45,7 +45,7 @@ The viewer preserves the global dynamic range of the original HDR image while ap
 
 The viewer also supports video playback.
 
-![demo](./assets/video.gif)
+![demo](assets/video.gif)
 
 ---
 
@@ -57,7 +57,7 @@ The viewer also supports 3D models visualization. The following formats are supp
 * .ply
 * .pcd
 
-![demo](./assets/3dviewer.gif)
+![demo](assets/zebra.gif)
 
 ---
 
@@ -158,30 +158,35 @@ Run **riv** by passing an image file or a directory containing images:
 riv <image_or_folder>
 ```
 
+Or you can use more than one image at the same time:
+
+```bash
+riv imgs/pingpong.exr imgs/normals.exr
+```
 ### Examples
 
 Open a single HDR image:
 
 ```bash
-riv ./imgs/pingpong.exr
+riv imgs/pingpong.exr
 ```
 
 Open a single polarized image:
 
 ```bash
-riv ./imgs/image.raw
+riv imgs/image.raw
 ```
 
 Open a 3D model:
 
 ```bash
-riv ./models/bunny.obj
+riv models/bunny.obj
 ```
 
 Open a folder and browse through all images with ← / →:
 
 ```bash
-riv ./imgs
+riv imgs
 ```
 
 
