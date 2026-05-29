@@ -874,9 +874,9 @@ std::vector<AppContext> processInputArguments(int argc, char** argv)
         std::string input = argv[i];
         if (std::filesystem::is_directory(input)) {
             std::vector<std::string> dir_files = getImages(input);
-            for (auto &f : dir_files) {
+            if (!dir_files.empty()) {
                 AppContext c;
-                c.images.push_back(f);
+                c.images.insert(c.images.end(), dir_files.begin(), dir_files.end());
                 out.push_back(std::move(c));
             }
         } else {
